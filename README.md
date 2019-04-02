@@ -288,7 +288,8 @@ alert tcp any any -> any any (msg:"Mon nom!"; content:"Rubinstein"; sid:4000015;
 
 ---
 
-**Reponse :**  
+**Reponse :**
+Cette règle va lever une alerte et journaliser le message "Mon nom!" dès que le nom "Rubinstein" sera détecté dans l'un des payloads d'un paquet tcp entrant ou sortant de la machine.
 
 ---
 
@@ -302,7 +303,19 @@ sudo snort -c myrules.rules -i eth0
 
 ---
 
-**Reponse :**  
+**Reponse :**
+Nous avons implémenté la règle suivante:
+alert tcp any any -> any any (msg:"Mot trouvé!"; content:"bitcoin"; sid:4000020; rev:1;)
+
+Lorsque nous lançons la commande `sudo snort -c /etc/snort/rules/myrules.rules -i eth0`, nous obtenons l'affichage suiavant dans le terminal:
+
+![alt-text](images/affichageTerminalSnort.png)
+
+Ceci est dû au fait que nous n'avons pas indiqué de directives de preprocessing dans myrules.rules.
+
+Par contre les alertes sont correctements journalisées dans `/var/log/snort/alert`:
+
+![alt-text](images/alertRule1.png)
 
 ---
 
