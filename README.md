@@ -313,9 +313,9 @@ Lorsque nous lançons la commande `sudo snort -c /etc/snort/rules/myrules.rules 
 
 Ceci est dû au fait que nous n'avons pas indiqué de directives de preprocessing dans myrules.rules.
 
-Par contre les alertes sont correctements journalisées dans `/var/log/snort/alert`:
 
-![alt-text](images/alertRule1.png)
+
+
 
 ---
 
@@ -326,6 +326,10 @@ Aller à un site web contenant votre nom ou votre mot clé que vous avez choisi 
 ---
 
 **Reponse :**  
+Lorsqu'on accède à un site qui contient notre mot clef, des alertes sont journalisées par Snort.
+Ici notre mot clef est `bitcoin` et nous avonc accédé au site `bitcoin.org`.
+
+![alt-text](images/alertRule1.png)
 
 ---
 
