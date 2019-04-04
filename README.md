@@ -276,6 +276,7 @@ Vous pouvez aussi utiliser des captures Wireshark ou des fichiers snort.log.xxxx
 
 ## Exercises
 
+
 **Réaliser des captures d'écran des exercices suivants et les ajouter à vos réponses.**
 
 ### Trouver votre nom :
@@ -325,11 +326,11 @@ Aller à un site web contenant votre nom ou votre mot clé que vous avez choisi 
 Lorsqu'on accède à un site qui contient notre mot clef, des alertes sont journalisées par Snort.
 Ici notre mot clef est `bitcoin` et nous avonc accédé au site `bitcoin.org`.
 La connection est en https mais Snort détecte tout de même le mot `bitcoin` lorsque nous naviguons sur le site.
-Ceci est certainement dû au fait que le mot clef se trouve dans l'url.
+Ceci est dû au fait que le mot clef se trouve dans l'url.
 
 Lors de l'arrêt de Snort on constate que des alertes ont été levées suit à la détection du mot clef.
 
-![alt-text](images/rule1AlertStats.png)
+![alt-text](images/rule1AlertStats.png "Résultats de l'exécution de Snort")
 
 ---
 
@@ -342,7 +343,17 @@ Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il 
 **Reponse :** 
 Dans le journal, les alertes ressemblent à ceci:
 
-![alt-text](images/alertRule1.png)
+![alt-text](images/alertRule1.png "Alertes journalisées")
+
+`[1:4000020:1] Mot trouvé!`: [Générateur SIG: SID : révision] Message
+
+`04/02-16:31:11.339284 10.192.92.162:41292 -> 138.68.248.245:443`: date-heure ip_source:port -> ip_destination:port
+
+`TCP TTL:64 TOS:0x0 ID:42119 IpLen:20 DgmLen:610 DF`: protocole 
+
+`***AP*** Seq: 0x... Ack: 0x... Win: 0x... TcpLen: 32`:
+
+`TCP Options (3) => NOP NOP TS: ... ...`:
 
 ---
 
@@ -358,6 +369,12 @@ Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wi
 ---
 
 **Reponse :**  
+Notre règle est la suivante: `log tcp any any ->  91.198.174.192 80,443 (sid:4000021; rev:1;)`
+Le message a été journalisé dans `/var/log/snort/`.
+
+Les paquets *https* correspondant à la connexion à `wikipedia.org` ont été journalisés.
+
+![alt-text](images/wikipediaSnortLog.png "Extrait du log de la connexion à wikipédia.org")
 
 ---
 
