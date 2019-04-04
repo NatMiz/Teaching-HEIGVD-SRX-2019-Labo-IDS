@@ -307,15 +307,11 @@ sudo snort -c myrules.rules -i eth0
 Nous avons implémenté la règle suivante:
 alert tcp any any -> any any (msg:"Mot trouvé!"; content:"bitcoin"; sid:4000020; rev:1;)
 
-Lorsque nous lançons la commande `sudo snort -c /etc/snort/rules/myrules.rules -i eth0`, nous obtenons l'affichage suiavant dans le terminal:
+Lorsque nous lançons la commande `sudo snort -c /etc/snort/rules/myrules.rules -i eth0`, nous obtenons l'affichage suivant dans le terminal:
 
 ![alt-text](images/affichageTerminalSnort.png)
 
 Ceci est dû au fait que nous n'avons pas indiqué de directives de preprocessing dans myrules.rules.
-
-
-
-
 
 ---
 
@@ -328,8 +324,12 @@ Aller à un site web contenant votre nom ou votre mot clé que vous avez choisi 
 **Reponse :**  
 Lorsqu'on accède à un site qui contient notre mot clef, des alertes sont journalisées par Snort.
 Ici notre mot clef est `bitcoin` et nous avonc accédé au site `bitcoin.org`.
+La connection est en https mais Snort détecte tout de même le mot `bitcoin` lorsque nous naviguons sur le site.
+Ceci est certainement dû au fait que le mot clef se trouve dans l'url.
 
-![alt-text](images/alertRule1.png)
+Lors de l'arrêt de Snort on constate que des alertes ont été levées suit à la détection du mot clef.
+
+![alt-text](images/rule1AlertStats.png)
 
 ---
 
@@ -339,7 +339,10 @@ Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il 
 
 ---
 
-**Reponse :**  
+**Reponse :** 
+Dans le journal, les alertes ressemblent à ceci:
+
+![alt-text](images/alertRule1.png)
 
 ---
 
