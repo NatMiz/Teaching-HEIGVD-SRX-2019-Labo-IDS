@@ -421,12 +421,18 @@ Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la r
 
 Modifier votre règle pour que les pings soient détectés dans les deux sens.
 
-**Question 7: Qu'est-ce que vous avez modifié pour que la règle détecte maintenant le trafic dans les deux sens ?**
+**Question 7 : Qu'est-ce que vous avez modifié pour que la règle détecte maintenant le trafic dans les deux sens ?**
 
 ---
 
 **Reponse :**
-Nous avons remplacé `->` par `<>` afin que la règle s'applique au trafic dans les sens. La nouvelle règle est désormais: `alert icmp any any <> 192.168.8.101 any (itype: 8; msg: "ping received"; sid: 4000030; rev: 1;)`
+
+Nous avons remplacé `->` par `<>` afin que la règle s'applique au trafic dans les deux sens. La nouvelle règle est désormais :
+
+```
+alert icmp any any <> 10.192.92.162 any (itype: 8; msg: "Echo Request received"; sid: 4000030; rev: 2;)
+```
+
 ---
 
 
