@@ -324,7 +324,7 @@ Aller à un site web contenant votre nom ou votre mot clé que vous avez choisi 
 
 **Reponse :**  
 Lorsqu'on accède à un site qui contient notre mot clef, des alertes sont journalisées par Snort.
-Ici notre mot clef est `bitcoin` et nous avonc accédé au site `bitcoin.org`.
+Ici notre mot clef est `bitcoin` et nous avons donc accédé au site `bitcoin.org`.
 La connection est en https mais Snort détecte tout de même le mot `bitcoin` lorsque nous naviguons sur le site.
 Ceci est dû au fait que le mot clef se trouve dans l'url.
 
@@ -349,11 +349,11 @@ Dans le journal, les alertes ressemblent à ceci:
 
 `04/02-16:31:11.339284 10.192.92.162:41292 -> 138.68.248.245:443`: date-heure ip_source:port -> ip_destination:port
 
-`TCP TTL:64 TOS:0x0 ID:42119 IpLen:20 DgmLen:610 DF`: protocole 
+`TCP TTL:64 TOS:0x0 ID:42119 IpLen:20 DgmLen:610 DF`: protocole Time-To-Live Type-Of-Service Packet-ID IP-Length Datagram-Length Don't-Fragment
 
-`***AP*** Seq: 0x... Ack: 0x... Win: 0x... TcpLen: 32`:
+`***AP*** Seq: 0x... Ack: 0x... Win: 0x... TcpLen: 32`: Sequence-number Acknowledge-value Window-size TCP-segment-Length
 
-`TCP Options (3) => NOP NOP TS: ... ...`:
+`TCP Options (3) => NOP NOP TS: ... ...`: No-Operation No-Operation Timestamp Checksum
 
 ---
 
@@ -369,12 +369,12 @@ Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wi
 ---
 
 **Reponse :**  
-Notre règle est la suivante: `log tcp any any ->  91.198.174.192 80,443 (sid:4000021; rev:1;)`
-Le message a été journalisé dans `/var/log/snort/`.
+Notre règle est la suivante: `log tcp 10.192.92.162 any ->  91.198.174.192 80,443 (sid:4000021; rev:1;)`
+Le message a été journalisé dans `/var/log/snort/snort.log.1554392061`.
 
 Les paquets *https* correspondant à la connexion à `wikipedia.org` ont été journalisés.
 
-![alt-text](images/wikipediaSnortLog.png "Extrait du log de la connexion à wikipédia.org")
+![alt-text](images/wikipediaSnort.png "Extrait du log de la connexion à wikipédia.org")
 
 ---
 
@@ -389,7 +389,10 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 ---
 
 **Reponse :**  
+Notre règle est la suivante:
+`alert icmp any any -> 192.168.8.101 any (itype: 8; msg: "ping received"; sid: 4000030; rev: 1;)`
 
+Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la règle le type de paquet à identifier.
 ---
 
 --
@@ -398,12 +401,14 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 
 Modifier votre règle pour que les pings soient détectés dans les deux sens.
 
-**Question 7: Qu'est-ce que vous avez modifié pour que la règle détecte maintenant le trafic dans les deux senses ?**
+**Question 7: Qu'est-ce que vous avez modifié pour que la règle détecte maintenant le trafic dans les deux sens ?**
 
 ---
 
-**Reponse :**  
+**Reponse :**
+Nous avons remplacé `->` par `<>` afin que la règle s'applique au trafic dans les sens. La nouvelle règle est désormais:
 
+`alert icmp any any <> 192.168.8.101 any (itype: 8; msg: "ping received"; sid: 4000030; rev: 1;)`
 ---
 
 
