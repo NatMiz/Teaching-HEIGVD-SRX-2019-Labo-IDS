@@ -420,7 +420,8 @@ Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été 
 
 ---
 
-**Reponse :**  
+**Reponse :**
+Notre règle pour détecter des tentatives de login ssh: `alert tcp 192.168.8.102 any -> 192.168.8.101 22 (msg: "Tentative de connection SSH"; sid: 4000040; rev: 1;)`
 
 ---
 
@@ -434,7 +435,8 @@ Lancer Wireshark et faire une capture du trafic sur l'interface connectée au br
 
 ---
 
-**Reponse :**  
+**Reponse :** 
+L'option *-r* permet d'analyser un fichier pcap ou un fichier de log.
 
 ---
 
@@ -444,7 +446,9 @@ Utiliser l'option correcte de Snort pour analyser le fichier de capture Wireshar
 
 ---
 
-**Reponse :**  
+**Reponse :**
+Snort lit le fichier ligne par ligne en le traitant en appliquant ses règles de filtrage puis termine par un affichagedes résultats d'analyse. La seule différence avec l'analyse temps réel est qu'aucun fichier de log n'est créé.
+Aucune nouvelle alerte n'est enregistrée dans le fichier d'alerte.
 
 ---
 
