@@ -409,7 +409,7 @@ alert icmp any any -> 10.192.92.162 any (itype: 8; msg: "Echo Request received";
 
 (Je me demande s'il ne faut pas mettre !10.192.92.162 à la place de any)
 
-Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la règle le type de paquet à identifier. Le message a été journalisé dans les logs comme indiqué précédement.
+Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la règle le type de paquet à identifier. Le message a été journalisé dans les logs comme indiqué précédement ainsi que dans le fichier alert.
 
 ![ping entrant](images/pingEntrant.png)
 
