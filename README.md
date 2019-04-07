@@ -395,15 +395,24 @@ L'IP 10.192.92.162 correspond à l'adresse de notre machine et l'IP 91.198.174.1
 
 Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping depuis une autre machine. Assurez-vous que **ça n'alerte pas** quand c'est vous qui envoyez le ping vers un autre système !
 
-**Question 6: Quelle est votre règle ? Comment avez-vous fait pour que ça identifie seulement les pings entrants ? Où le message a-t'il été journalisé ? Qu'est-ce qui a été journalisé ?**
+**Question 6 : Quelle est votre règle ? Comment avez-vous fait pour que ça identifie seulement les pings entrants ? Où le message a-t'il été journalisé ? Qu'est-ce qui a été journalisé ?**
 
 ---
 
-**Reponse :**  
-Notre règle est la suivante:
-`alert icmp any any -> 192.168.8.101 any (itype: 8; msg: "ping received"; sid: 4000030; rev: 1;)`
+**Reponse :**
 
-Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la règle le type de paquet à identifier.
+Notre règle est la suivante :
+
+```
+alert icmp any any -> 10.192.92.162 any (itype: 8; msg: "Echo Request received"; sid: 4000030; rev: 1;)
+```
+
+(Je me demande s'il ne faut pas mettre !10.192.92.162 à la place de any)
+
+Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la règle le type de paquet à identifier. Le message a été journalisé dans les logs comme indiqué précédement.
+
+![ping entrant](images/pingEntrant.png)
+
 ---
 
 --
