@@ -290,7 +290,7 @@ alert tcp any any -> any any (msg:"Mon nom!"; content:"Rubinstein"; sid:4000015;
 ---
 
 **Reponse :**
-Cette règle va lever une alerte et journaliser le message "Mon nom!" dès que le nom "Rubinstein" sera détecté dans l'un des payloads d'un paquet tcp entrant ou sortant de la machine.
+Cette règle va lever une alerte et journaliser le message "Mon nom!" dès que Snort verra passer le nom "Rubinstein" dans le payload d'un paquet TCP provenant de et se dirigeant vers n'importe quelle adresse IP et n'importe quel port.
 
 ---
 
@@ -300,17 +300,25 @@ Utiliser un éditeur et créer un fichier `myrules.rules` sur votre répertoire 
 sudo snort -c myrules.rules -i eth0
 ```
 
-**Question 2: Que voyez-vous quand le logiciel est lancé ? Qu'est-ce que ça vaut dire ?**
+**Question 2: Que voyez-vous quand le logiciel est lancé ? Qu'est-ce que ça veut dire ?**
 
 ---
 
 **Reponse :**
-Nous avons implémenté la règle suivante:
+
+Nous avons implémenté la règle suivante :
+
+```
 alert tcp any any -> any any (msg:"Mot trouvé!"; content:"bitcoin"; sid:4000020; rev:1;)
+```
 
-Lorsque nous lançons la commande `sudo snort -c /etc/snort/rules/myrules.rules -i eth0`, nous obtenons l'affichage suivant dans le terminal:
+Lorsque nous lançons la commande `snort -c /etc/snort/rules/myrules.rules -i eth0`, nous obtenons l'affichage suivant dans le terminal :
 
-![alt-text](images/affichageTerminalSnort.png)
+![snort_info](images/snortInfo.png)
+
+On peut observer diverses informations tel que le fichier de règles utilisé, le nombre de règles détectées et un tableau récapitulatif de ces règles. Les avertissements suivants sont aussi affichés :
+
+![no_prep_configured](images/affichageTerminalSnort.png)
 
 Ceci est dû au fait que nous n'avons pas indiqué de directives de preprocessing dans myrules.rules.
 
