@@ -377,10 +377,13 @@ Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wi
 ---
 
 **Reponse :**  
-Notre règle est la suivante: `log tcp 10.192.92.162 any ->  91.198.174.192 80,443 (sid:4000021; rev:1;)`
-Le message a été journalisé dans `/var/log/snort/snort.log.1554392061`.
 
-Les paquets *https* correspondant à la connexion à `wikipedia.org` ont été journalisés.
+Notre règle est la suivante :
+
+```
+log tcp 10.192.92.162 any ->  91.198.174.192 80,443 (sid:4000021; rev:1;)
+```
+L'IP 10.192.92.162 correspond à l'adresse de notre machine et l'IP 91.198.174.192 au serveur Wikipedia. Le message a été journalisé dans `/var/log/snort/snort.log.1554392061`. Les paquets *https* correspondant à la connexion à `wikipedia.org` ont été journalisés.
 
 ![alt-text](images/wikipediaSnort.png "Extrait du log de la connexion à wikipédia.org")
 
