@@ -447,7 +447,14 @@ Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été 
 ---
 
 **Reponse :**
-Notre règle pour détecter des tentatives de login ssh: `alert tcp 192.168.8.102 any -> 192.168.8.101 22 (msg: "Tentative de connection SSH"; sid: 4000040; rev: 1;)`
+
+Notre règle pour détecter des tentatives de login SSH depuis la machine d'un voisin (10.192.92.161) est :
+
+```
+alert tcp 10.192.92.161 any -> 10.192.92.162 22 (msg: "Tentative de connection SSH du voisin"; sid: 4000040; rev: 1;)
+```
+
+Le fonctionnement est le suivant : on observe les connections TCP de la machine du voisin vers la notre sur le port 22 (port SSH).
 
 ---
 
