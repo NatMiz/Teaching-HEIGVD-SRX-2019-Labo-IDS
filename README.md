@@ -290,7 +290,7 @@ alert tcp any any -> any any (msg:"Mon nom!"; content:"Rubinstein"; sid:4000015;
 ---
 
 **Reponse :**
-Cette règle va lever une alerte et journaliser le message "Mon nom!" dès que le nom "Rubinstein" sera détecté dans l'un des payloads d'un paquet tcp entrant ou sortant de la machine.
+Cette règle va lever une alerte et journaliser le message "Mon nom!" dès que Snort verra passer le nom "Rubinstein" dans le payload d'un paquet TCP provenant de et se dirigeant vers n'importe quelle adresse IP et n'importe quel port.
 
 ---
 
@@ -300,17 +300,25 @@ Utiliser un éditeur et créer un fichier `myrules.rules` sur votre répertoire 
 sudo snort -c myrules.rules -i eth0
 ```
 
-**Question 2: Que voyez-vous quand le logiciel est lancé ? Qu'est-ce que ça vaut dire ?**
+**Question 2: Que voyez-vous quand le logiciel est lancé ? Qu'est-ce que ça veut dire ?**
 
 ---
 
 **Reponse :**
-Nous avons implémenté la règle suivante:
+
+Nous avons implémenté la règle suivante :
+
+```
 alert tcp any any -> any any (msg:"Mot trouvé!"; content:"bitcoin"; sid:4000020; rev:1;)
+```
 
-Lorsque nous lançons la commande `sudo snort -c /etc/snort/rules/myrules.rules -i eth0`, nous obtenons l'affichage suivant dans le terminal:
+Lorsque nous lançons la commande `snort -c /etc/snort/rules/myrules.rules -i eth0`, nous obtenons l'affichage suivant dans le terminal :
 
-![alt-text](images/affichageTerminalSnort.png)
+![snort_info](images/snortInfo.png)
+
+On peut observer diverses informations tel que le fichier de règles utilisé, le nombre de règles détectées et un tableau récapitulatif de ces règles. Les avertissements suivants sont aussi affichés :
+
+![no_prep_configured](images/affichageTerminalSnort.png)
 
 Ceci est dû au fait que nous n'avons pas indiqué de directives de preprocessing dans myrules.rules.
 
@@ -369,10 +377,13 @@ Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wi
 ---
 
 **Reponse :**  
-Notre règle est la suivante: `log tcp 10.192.92.162 any ->  91.198.174.192 80,443 (sid:4000021; rev:1;)`
-Le message a été journalisé dans `/var/log/snort/snort.log.1554392061`.
 
-Les paquets *https* correspondant à la connexion à `wikipedia.org` ont été journalisés.
+Notre règle est la suivante :
+
+```
+log tcp 10.192.92.162 any ->  91.198.174.192 80,443 (sid:4000021; rev:1;)
+```
+L'IP 10.192.92.162 correspond à l'adresse de notre machine et l'IP 91.198.174.192 au serveur Wikipedia. Le message a été journalisé dans `/var/log/snort/snort.log.1554392061`. Les paquets *https* correspondant à la connexion à `wikipedia.org` ont été journalisés.
 
 ![alt-text](images/wikipediaSnort.png "Extrait du log de la connexion à wikipédia.org")
 
@@ -384,15 +395,24 @@ Les paquets *https* correspondant à la connexion à `wikipedia.org` ont été j
 
 Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping depuis une autre machine. Assurez-vous que **ça n'alerte pas** quand c'est vous qui envoyez le ping vers un autre système !
 
-**Question 6: Quelle est votre règle ? Comment avez-vous fait pour que ça identifie seulement les pings entrants ? Où le message a-t'il été journalisé ? Qu'est-ce qui a été journalisé ?**
+**Question 6 : Quelle est votre règle ? Comment avez-vous fait pour que ça identifie seulement les pings entrants ? Où le message a-t'il été journalisé ? Qu'est-ce qui a été journalisé ?**
 
 ---
 
-**Reponse :**  
-Notre règle est la suivante:
-`alert icmp any any -> 192.168.8.101 any (itype: 8; msg: "ping received"; sid: 4000030; rev: 1;)`
+**Reponse :**
 
-Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la règle le type de paquet à identifier.
+Notre règle est la suivante :
+
+```
+alert icmp any any -> 10.192.92.162 any (itype: 8; msg: "Echo Request received"; sid: 4000030; rev: 1;)
+```
+
+(Je me demande s'il ne faut pas mettre !10.192.92.162 à la place de any)
+
+Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la règle le type de paquet à identifier. Le message a été journalisé dans les logs comme indiqué précédement ainsi que dans le fichier alert.
+
+![ping entrant](images/pingEntrant.png)
+
 ---
 
 --
@@ -401,12 +421,18 @@ Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la r
 
 Modifier votre règle pour que les pings soient détectés dans les deux sens.
 
-**Question 7: Qu'est-ce que vous avez modifié pour que la règle détecte maintenant le trafic dans les deux sens ?**
+**Question 7 : Qu'est-ce que vous avez modifié pour que la règle détecte maintenant le trafic dans les deux sens ?**
 
 ---
 
 **Reponse :**
-Nous avons remplacé `->` par `<>` afin que la règle s'applique au trafic dans les sens. La nouvelle règle est désormais: `alert icmp any any <> 192.168.8.101 any (itype: 8; msg: "ping received"; sid: 4000030; rev: 1;)`
+
+Nous avons remplacé `->` par `<>` afin que la règle s'applique au trafic dans les deux sens. La nouvelle règle est désormais :
+
+```
+alert icmp any any <> 10.192.92.162 any (itype: 8; msg: "Echo Request received"; sid: 4000030; rev: 2;)
+```
+
 ---
 
 
@@ -421,7 +447,14 @@ Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été 
 ---
 
 **Reponse :**
-Notre règle pour détecter des tentatives de login ssh: `alert tcp 192.168.8.102 any -> 192.168.8.101 22 (msg: "Tentative de connection SSH"; sid: 4000040; rev: 1;)`
+
+Notre règle pour détecter des tentatives de login SSH depuis la machine d'un voisin (10.192.92.161) est :
+
+```
+alert tcp 10.192.92.161 any -> 10.192.92.162 22 (msg: "Tentative de connection SSH du voisin"; sid: 4000040; rev: 1;)
+```
+
+Le fonctionnement est le suivant : on observe les connections TCP de la machine du voisin vers la notre sur le port 22 (port SSH).
 
 ---
 
