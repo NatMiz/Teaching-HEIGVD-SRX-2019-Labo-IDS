@@ -25,7 +25,7 @@ Clonez le repo sur votre machine. Vous pouvez répondre aux questions en modifia
 [Travail à effectuer](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#exercises)
 
 
-## Echéance 
+## Echéance
 
 Ce travail devra être rendu le dimanche après la fin de la 2ème séance de laboratoire, soit au plus tard, **le 14 avril 2019, à 23h.**
 
@@ -42,9 +42,9 @@ Un exemple de règle pourrait être, en language commun : "donner une alerte pou
 
 Snort est un IDS très puissant. Il est gratuit pour l'utilisation personnelle et en entreprise, où il est très utilisé aussi pour la simple raison qu'il est l'un des plus efficaces systèmes IDS.
 
-Snort peut être exécuté comme un logiciel indépendant sur une machine ou comme un service qui tourne après chaque démarrage. Si vous voulez qu'il protège votre réseau, fonctionnant comme un IPS, il faudra l'installer "in-line" avec votre connexion Internet. 
+Snort peut être exécuté comme un logiciel indépendant sur une machine ou comme un service qui tourne après chaque démarrage. Si vous voulez qu'il protège votre réseau, fonctionnant comme un IPS, il faudra l'installer "in-line" avec votre connexion Internet.
 
-Par exemple, pour une petite entreprise avec un accès Internet avec un modem simple et un switch interconnectant une dizaine d'ordinateurs de bureau, il faudra utiliser une nouvelle machine executant Snort et placée entre le modem et le switch. 
+Par exemple, pour une petite entreprise avec un accès Internet avec un modem simple et un switch interconnectant une dizaine d'ordinateurs de bureau, il faudra utiliser une nouvelle machine executant Snort et placée entre le modem et le switch.
 
 
 ## Matériel
@@ -102,11 +102,11 @@ Pour arrêter Snort, il suffit d'utiliser `CTRL-C`.
 
 ## Utilisation comme un IDS
 
-Pour enregistrer seulement les alertes et pas tout le trafic, on execute Snort en mode IDS. Il faudra donc spécifier un fichier contenant des règles. 
+Pour enregistrer seulement les alertes et pas tout le trafic, on execute Snort en mode IDS. Il faudra donc spécifier un fichier contenant des règles.
 
 Il faut noter que `/etc/snort/snort.config` contient déjà des références aux fichiers de règles disponibles avec l'installation par défaut. Si on veut tester Snort avec des règles simples, on peut créer un fichier de config personnalisé (par exemple `mysnort.conf`) et importer un seul fichier de règles utilisant la directive "include".
 
-Les fichiers de règles sont normalement stockes dans le repertoire `/etc/snort/rules/`, mais en fait un fichier de config et les fichiers de règles peuvent se trouver dans n'importe quel repertoire. 
+Les fichiers de règles sont normalement stockes dans le repertoire `/etc/snort/rules/`, mais en fait un fichier de config et les fichiers de règles peuvent se trouver dans n'importe quel repertoire.
 
 Par exemple, créez un fichier de config `mysnort.conf` dans le repertoire `/etc/snort` avec le contenu suivant :
 
@@ -124,7 +124,7 @@ On peut maintenant executer la commande :
 snort -c /etc/snort/mysnort.conf
 ```
 
-Vous pouvez maintenant faire quelques pings depuis votre hôte et regarder les résultas dans le fichier d'alertes contenu dans le repertoire `/var/log/snort/`. 
+Vous pouvez maintenant faire quelques pings depuis votre hôte et regarder les résultas dans le fichier d'alertes contenu dans le repertoire `/var/log/snort/`.
 
 
 ## Ecriture de règles
@@ -150,7 +150,7 @@ Cette règle décrit une alerte générée quand Snort trouve un paquet avec tou
 * Emis depuis n'importe quelle adresse et depuis n'importe quel port
 * A destination du réseau identifié par l'adresse 192.168.1.0/24 sur le port 111
 
-Le text jusqu'au premier parenthèse est l'entête de la règle. 
+Le text jusqu'au premier parenthèse est l'entête de la règle.
 
 ```
 alert tcp any any -> 192.168.1.0/24 111
@@ -169,7 +169,7 @@ alert tcp any any -> any 21 (content:"site exec"; content:"%"; msg:"site
 exec buffer overflow attempt";)
 ```
 
-La clé "content" apparait deux fois parce que les deux strings qui doivent être détectés n'apparaissent pas concaténés dans le paquet mais à des endroits différents. Pour que la règle soit déclenchée, il faut que le paquet contienne **les deux strings** "site exec" et "%". 
+La clé "content" apparait deux fois parce que les deux strings qui doivent être détectés n'apparaissent pas concaténés dans le paquet mais à des endroits différents. Pour que la règle soit déclenchée, il faut que le paquet contienne **les deux strings** "site exec" et "%".
 
 Les éléments dans les options d'une règle sont traitées comme un AND logique. La liste complète de règles sont traitées comme une succession de OR.
 
@@ -199,7 +199,7 @@ Le champ suivant c'est le protocole. Il y a trois protocoles IP qui peuvent êtr
 
 ### Adresses IP :
 
-La section suivante traite les adresses IP et les numéros de port. Le mot `any` peut être utilisé pour définir "n'import quelle adresse". On peut utiliser l'adresse d'une seule machine ou un block avec la notation CIDR. 
+La section suivante traite les adresses IP et les numéros de port. Le mot `any` peut être utilisé pour définir "n'import quelle adresse". On peut utiliser l'adresse d'une seule machine ou un block avec la notation CIDR.
 
 Un opérateur de négation peut être appliqué aux adresses IP. Cet opérateur indique à Snort d'identifier toutes les adresses IP sauf celle indiquée. L'opérateur de négation est le `!`.
 
@@ -241,7 +241,7 @@ Journaliser le traffic TCP venant d'un port privilégié (bien connu) plus grand
 
 ### Opérateur de direction
 
-L'opérateur de direction `->`indique l'orientation ou la "direction" du trafique. 
+L'opérateur de direction `->`indique l'orientation ou la "direction" du trafique.
 
 Il y a aussi un opérateur bidirectionnel, indiqué avec le symbole `<>`, utile pour analyser les deux côtés de la conversation. Par exemple un échange telnet :
 
@@ -348,7 +348,7 @@ Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il 
 
 ---
 
-**Reponse :** 
+**Reponse :**
 Dans le journal, les alertes ressemblent à ceci:
 
 ![alt-text](images/alertRule1.png "Alertes journalisées")
@@ -404,14 +404,10 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 Notre règle est la suivante :
 
 ```
-alert icmp any any -> 10.192.92.162 any (itype: 8; msg: "Echo Request received"; sid: 4000030; rev: 1;)
+alert icmp !10.192.92.162 any -> 10.192.92.162 any (itype: 8; msg: "Echo Request received"; sid: 4000030; rev: 1;)
 ```
 
-(Je me demande s'il ne faut pas mettre !10.192.92.162 à la place de any)
-
 Afin que seuls les ping entrants soient détectés, nous avons ajouté dans la règle le type de paquet à identifier. Le message a été journalisé dans les logs comme indiqué précédement ainsi que dans le fichier alert.
-
-![ping entrant](images/pingEntrant.png)
 
 ---
 
@@ -472,7 +468,7 @@ Lancer Wireshark et faire une capture du trafic sur l'interface connectée au br
 
 ---
 
-**Reponse :** 
+**Reponse :**
 L'option *-r* permet d'analyser un fichier pcap ou un fichier de log. On ajoute l'option *-c* pour spécifier les règles à appliquer lors de l'analyse.
 
 ---
