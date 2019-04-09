@@ -430,8 +430,10 @@ Modifier votre règle pour que les pings soient détectés dans les deux sens.
 Nous avons remplacé `->` par `<>` afin que la règle s'applique au trafic dans les deux sens. La nouvelle règle est désormais :
 
 ```
-alert icmp any any <> 10.192.92.162 any (itype: 8; msg: "Echo Request received"; sid: 4000030; rev: 2;)
+alert icmp 10.192.92.162 any <> 10.192.93.228 any (itype: 8; msg: "ECHO REQUEST received"; sid: 4000030; rev: 2;)
 ```
+
+![alertes ICMP](images/SnortICMP.png)
 
 ---
 
@@ -451,10 +453,12 @@ Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été 
 Notre règle pour détecter des tentatives de login SSH depuis la machine d'un voisin (10.192.92.161) est :
 
 ```
-alert tcp 10.192.92.161 any -> 10.192.92.162 22 (msg: "Tentative de connection SSH du voisin"; sid: 4000040; rev: 1;)
+alert tcp 10.192.93.228 any -> 10.192.92.162 22 (msg: "Tentative de connection SSH du voisin"; sid: 4000040; rev: 1;)
 ```
 
 Le fonctionnement est le suivant : on observe les connections TCP de la machine du voisin vers la notre sur le port 22 (port SSH).
+
+![alertes ssh](images/SnortSSH.png)
 
 ---
 
@@ -469,7 +473,7 @@ Lancer Wireshark et faire une capture du trafic sur l'interface connectée au br
 ---
 
 **Reponse :** 
-L'option *-r* permet d'analyser un fichier pcap ou un fichier de log.
+L'option *-r* permet d'analyser un fichier pcap ou un fichier de log. On ajoute l'option *-c* pour spécifier les règles à appliquer lors de l'analyse.
 
 ---
 
@@ -480,8 +484,8 @@ Utiliser l'option correcte de Snort pour analyser le fichier de capture Wireshar
 ---
 
 **Reponse :**
-Snort lit le fichier ligne par ligne en le traitant en appliquant ses règles de filtrage puis termine par un affichagedes résultats d'analyse. La seule différence avec l'analyse temps réel est qu'aucun fichier de log n'est créé.
-Aucune nouvelle alerte n'est enregistrée dans le fichier d'alerte.
+Snort lit le fichier ligne par ligne en le traitant en appliquant ses règles de filtrage puis termine par un affichage des résultats d'analyse. Il n'y a pas de réelle différence avec l'analyse temps réelle. Des alertes sont aussi enregistrées dans le fichier d'alertes.
+
 
 ---
 
